@@ -6,47 +6,50 @@
 
 <style>
 
+/* 🔥 PERUS */
 html, body {
   margin: 0;
   padding: 0;
+  overflow: hidden;
   background: #141414;
   font-family: sans-serif;
-
-  /* 🔥 TÄMÄ POIS */
-  /* overflow: hidden; */
 }
 
-/* CONTAINER */
+/* 🔥 CONTAINER */
 .carousel {
   position: relative;
   padding: 12px 0;
+  box-sizing: border-box;
 }
 
-/* ROW */
+/* 🔥 ROW */
 .row {
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  overflow-y: visible;
-
+  overflow-y: hidden;
+  align-items: center;
   scroll-behavior: smooth;
+  width: 100%;
 
-  padding: 12px 14px;
-
-  /* 🔥 TÄRKEÄ */
-  align-items: flex-start;
+  /* 🔥 TÄRKEÄ FIX: antaa tilaa ettei kuva leikkaannu */
+  padding: 10px 14px;
+  box-sizing: border-box;
 }
 
 .row::-webkit-scrollbar {
   display: none;
 }
 
-/* CARD */
+/* 🔥 CARD */
 .card {
   flex: 0 0 auto;
+
   width: clamp(140px, 60vw, 260px);
 
+  /* 🔥 FIX: estää ylä/alaleikkauksen */
   aspect-ratio: 1 / 1;
+
   border-radius: 12px;
   overflow: hidden;
   background: #000;
@@ -54,24 +57,24 @@ html, body {
   transition: transform 0.25s ease;
 }
 
-/* IMAGE */
+/* 🔥 IMAGE */
 .card img {
   width: 100%;
   height: 100%;
-
   object-fit: cover;
-  object-position: center;
-
   display: block;
+
+  /* 🔥 FIX: varmistaa keskitys */
+  object-position: center center;
 }
 
-/* HOVER */
+/* 🔥 HOVER */
 .card:hover {
   transform: scale(1.08);
   z-index: 10;
 }
 
-/* BUTTONS */
+/* 🔥 BUTTONS */
 .btn {
   position: absolute;
   top: 50%;
@@ -91,24 +94,29 @@ html, body {
 /* 🔥 MOBIILI FIX */
 @media (max-width: 600px) {
 
-  .row {
-    padding: 12px 12px;
+  .carousel {
+    padding: 8px 0;
+  }
 
-    /* 🔥 tärkeä: estää clipping */
-    overflow-x: auto;
-    overflow-y: visible;
+  .row {
+    padding: 12px 16px; /* 🔥 lisää tilaa ylä/alareunaan */
+    gap: 10px;
   }
 
   .card {
-    width: 70vw;
-
-    /* 🔥 EI aspect-ratio: auto */
+    width: 75vw;
+    max-width: 260px;
     aspect-ratio: 1 / 1;
+
+    /* 🔥 estää leikkautumista reunoista */
+    overflow: hidden;
   }
 
   .card img {
-    /* 🔥 hieman enemmän näkyvyyttä */
-    object-position: center 40%;
+    object-fit: cover;
+
+    /* 🔥 tärkeä: hieman pienempi crop */
+    object-position: center 45%;
   }
 
   .card:hover {
@@ -117,6 +125,7 @@ html, body {
 
   .btn {
     font-size: 18px;
+    padding: 5px 8px;
   }
 }
 
@@ -131,6 +140,18 @@ html, body {
 
   <div class="row">
 
+    <!-- ORIGINAL -->
+    <div class="card"><img src="https://f4.bcbits.com/img/a0932635373_10.jpg"></div>
+    <div class="card"><img src="https://f4.bcbits.com/img/a2966160115_10.jpg"></div>
+    <div class="card"><img src="https://f4.bcbits.com/img/a3443131662_10.jpg"></div>
+    <div class="card"><img src="https://f4.bcbits.com/img/a0126627051_10.jpg"></div>
+    <div class="card"><img src="https://f4.bcbits.com/img/a1545842779_10.jpg"></div>
+    <div class="card"><img src="https://www.metal-archives.com/images/9/4/2/7/942729.jpg?5204"></div>
+    <div class="card"><img src="https://f4.bcbits.com/img/a2400986321_10.jpg"></div>
+    <div class="card"><img src="https://f4.bcbits.com/img/a2334861048_10.jpg"></div>
+    <div class="card"><img src="https://www.metal-archives.com/images/7/5/3/3/753301.jpg?0933"></div>
+
+    <!-- DUPLICATE -->
     <div class="card"><img src="https://f4.bcbits.com/img/a0932635373_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a2966160115_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a3443131662_10.jpg"></div>
@@ -150,9 +171,16 @@ const row = document.querySelector('.row');
 const leftBtn = document.querySelector('.btn-left');
 const rightBtn = document.querySelector('.btn-right');
 
-leftBtn.onclick = () => row.scrollBy({ left: -250, behavior: 'smooth' });
-rightBtn.onclick = () => row.scrollBy({ left: 250, behavior: 'smooth' });
+/* BUTTONS */
+leftBtn.onclick = () => {
+  row.scrollBy({ left: -250, behavior: 'smooth' });
+};
 
+rightBtn.onclick = () => {
+  row.scrollBy({ left: 250, behavior: 'smooth' });
+};
+
+/* TOUCH SWIPE */
 let startX = 0;
 let isTouching = false;
 

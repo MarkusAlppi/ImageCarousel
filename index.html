@@ -61,22 +61,7 @@ body {
   z-index: 10;
 }
 
-/* napit */
-.btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.6);
-  color: white;
-  border: none;
-  font-size: 22px;
-  padding: 6px 10px;
-  cursor: pointer;
-  z-index: 20;
-}
 
-.btn-left { left: 5px; }
-.btn-right { right: 5px; }
 
 /* 🔥 mobiili optimointi */
 @media (max-width: 600px) {
@@ -101,8 +86,7 @@ body {
 <body>
 
 <div class="carousel">
-  <button class="btn btn-left">‹</button>
-  <button class="btn btn-right">›</button>
+
 
   <div class="row">
 
@@ -134,8 +118,7 @@ body {
 <script>
 
 const row = document.querySelector('.row');
-const leftBtn = document.querySelector('.btn-left');
-const rightBtn = document.querySelector('.btn-right');
+
 
 let speed = 0;
 let targetSpeed = 0;
@@ -189,14 +172,7 @@ row.addEventListener('touchend', () => {
   isTouching = false;
 });
 
-/* 🔘 BUTTONS */
-leftBtn.onclick = () => {
-  row.scrollBy({ left: -200, behavior: 'smooth' });
-};
 
-rightBtn.onclick = () => {
-  row.scrollBy({ left: 200, behavior: 'smooth' });
-};
 
 /* 🎬 LOOP */
 function animate() {

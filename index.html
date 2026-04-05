@@ -6,20 +6,20 @@
 
 <style>
 
-/* 🔥 ESTÄ SCROLL */
+/* 🔥 BASE */
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  overflow: hidden;
   background: #141414;
   font-family: sans-serif;
+  overflow: hidden;
+  height: 100%;
 }
 
 /* 🔥 CONTAINER */
 .carousel {
   position: relative;
-  padding: 10px 10px 40px;
+  padding: 10px;
 }
 
 /* 🔥 ROW */
@@ -28,24 +28,22 @@ html, body {
   gap: 10px;
   overflow-x: auto;
   overflow-y: hidden;
-  align-items: center;
-  scroll-behavior: smooth;
   padding: 10px 0;
+  align-items: center;
 }
 
 .row::-webkit-scrollbar {
   display: none;
 }
 
-/* 🔥 CARD (RESPONSIIVINEN) */
+/* 🔥 CARD (TÄRKEÄ FIX) */
 .card {
   flex: 0 0 auto;
-  width: clamp(120px, 40vw, 260px); /* 🔥 tärkeä fix */
+  width: clamp(90px, 28vw, 200px); /* 🔥 pienempi ja mobiiliystävällinen */
   aspect-ratio: 1 / 1;
   border-radius: 10px;
   overflow: hidden;
   transition: transform 0.25s ease;
-  position: relative;
 }
 
 /* 🔥 KUVA */
@@ -58,7 +56,7 @@ html, body {
 
 /* 🔥 HOVER */
 .card:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
   z-index: 10;
 }
 
@@ -79,24 +77,25 @@ html, body {
 .btn-left { left: 5px; }
 .btn-right { right: 5px; }
 
-/* 🔥 MOBIILI */
+/* 🔥 MOBIILI FIX (TÄRKEIN) */
 @media (max-width: 600px) {
 
-  .carousel {
-    padding: 5px 5px 20px;
-  }
-
   .card {
-    width: clamp(100px, 45vw, 220px);
+    width: 85vw;        /* 🔥 yksi kuva kerrallaan */
+    max-width: 260px;
   }
 
   .card:hover {
-    transform: scale(1.05);
+    transform: none;     /* 🔥 ei zoomia mobiilissa */
   }
 
   .btn {
     font-size: 18px;
     padding: 5px 8px;
+  }
+
+  .carousel {
+    padding-bottom: 20px;
   }
 }
 
@@ -151,7 +150,7 @@ rightBtn.onclick = () => {
   row.scrollBy({ left: 250, behavior: 'smooth' });
 };
 
-/* 📱 TOUCH SWIPE */
+/* 📱 TOUCH */
 let startX = 0;
 let isTouching = false;
 

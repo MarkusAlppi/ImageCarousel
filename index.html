@@ -5,50 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-
-/* 🔥 ESTÄ SCROLL */
-html, body {
+body {
   margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow: hidden;
   background: #141414;
   font-family: sans-serif;
 }
 
-/* 🔥 CONTAINER */
 .carousel {
   position: relative;
-  padding: 10px 10px 40px;
+  padding: 15px 20px; /* 🔥 lisätty y-tilaa */
+  overflow: visible;
 }
 
-/* 🔥 ROW */
 .row {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   overflow-x: auto;
-  overflow-y: hidden;
-  align-items: center;
-  scroll-behavior: smooth;
-  padding: 10px 0;
+  overflow-y: visible; /* 🔥 tärkeä */
+  scroll-behavior: auto;
+  padding-top: 40px;     /* 🔥 tilaa hoverille */
+  padding-bottom: 40px;  /* 🔥 tilaa hoverille */
 }
 
 .row::-webkit-scrollbar {
   display: none;
 }
 
-/* 🔥 CARD (RESPONSIIVINEN) */
 .card {
   flex: 0 0 auto;
-  width: clamp(120px, 40vw, 260px); /* 🔥 tärkeä fix */
+  width: 300px;
   aspect-ratio: 1 / 1;
   border-radius: 10px;
-  overflow: hidden;
-  transition: transform 0.25s ease;
+  overflow: visible;
+  transition: transform 0.3s ease;
   position: relative;
 }
 
-/* 🔥 KUVA */
 .card img {
   width: 100%;
   height: 100%;
@@ -56,13 +48,13 @@ html, body {
   display: block;
 }
 
-/* 🔥 HOVER */
+/* hover */
 .card:hover {
-  transform: scale(1.1);
+  transform: scale(1.3);
   z-index: 10;
 }
 
-/* 🔥 NAPIT */
+/* napit */
 .btn {
   position: absolute;
   top: 50%;
@@ -70,39 +62,17 @@ html, body {
   background: rgba(0,0,0,0.6);
   color: white;
   border: none;
-  font-size: 24px;
-  padding: 8px 12px;
+  font-size: 30px;
+  padding: 10px 15px;
   cursor: pointer;
   z-index: 20;
 }
 
-.btn-left { left: 5px; }
-.btn-right { right: 5px; }
-
-/* 🔥 MOBIILI */
-@media (max-width: 600px) {
-
-  .carousel {
-    padding: 5px 5px 20px;
-  }
-
-  .card {
-    width: clamp(100px, 45vw, 220px);
-  }
-
-  .card:hover {
-    transform: scale(1.05);
-  }
-
-  .btn {
-    font-size: 18px;
-    padding: 5px 8px;
-  }
-}
+.btn-left { left: 10px; }
+.btn-right { right: 10px; }
 
 </style>
 </head>
-
 <body>
 
 <div class="carousel">
@@ -110,7 +80,6 @@ html, body {
   <button class="btn btn-right">›</button>
 
   <div class="row">
-
     <!-- ORIGINAL -->
     <div class="card"><img src="https://f4.bcbits.com/img/a0932635373_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a2966160115_10.jpg"></div>
@@ -122,7 +91,7 @@ html, body {
     <div class="card"><img src="https://f4.bcbits.com/img/a2334861048_10.jpg"></div>
     <div class="card"><img src="https://www.metal-archives.com/images/7/5/3/3/753301.jpg?0933"></div>
 
-    <!-- DUPLICATE -->
+    <!-- DUPLICATE (infinite loop) -->
     <div class="card"><img src="https://f4.bcbits.com/img/a0932635373_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a2966160115_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a3443131662_10.jpg"></div>
@@ -132,7 +101,6 @@ html, body {
     <div class="card"><img src="https://f4.bcbits.com/img/a2400986321_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a2334861048_10.jpg"></div>
     <div class="card"><img src="https://www.metal-archives.com/images/7/5/3/3/753301.jpg?0933"></div>
-
   </div>
 </div>
 
@@ -142,18 +110,38 @@ const row = document.querySelector('.row');
 const leftBtn = document.querySelector('.btn-left');
 const rightBtn = document.querySelector('.btn-right');
 
-/* 🔘 BUTTONS */
-leftBtn.onclick = () => {
-  row.scrollBy({ left: -250, behavior: 'smooth' });
-};
+let speed = 0;
+let targetSpeed = 0;
+let maxSpeed = 20;
+let autoSpeed = 2;
 
-rightBtn.onclick = () => {
-  row.scrollBy({ left: 250, behavior: 'smooth' });
-};
-
-/* 📱 TOUCH SWIPE */
-let startX = 0;
+let isHovering = false;
 let isTouching = false;
+
+// 🖱️ MOUSE CONTROL
+row.addEventListener('mousemove', (e) => {
+  const rect = row.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const width = rect.width;
+
+  let normalized = (x / width) - 0.5;
+
+  if (Math.abs(normalized) < 0.1) normalized = 0;
+
+  targetSpeed = normalized * maxSpeed;
+});
+
+row.addEventListener('mouseenter', () => {
+  isHovering = true;
+});
+
+row.addEventListener('mouseleave', () => {
+  isHovering = false;
+  targetSpeed = 0;
+});
+
+// 📱 TOUCH SWIPE
+let startX = 0;
 
 row.addEventListener('touchstart', (e) => {
   isTouching = true;
@@ -174,6 +162,43 @@ row.addEventListener('touchmove', (e) => {
 row.addEventListener('touchend', () => {
   isTouching = false;
 });
+
+// 🔘 NAPIT
+leftBtn.onclick = () => {
+  row.scrollBy({ left: -300, behavior: 'smooth' });
+};
+
+rightBtn.onclick = () => {
+  row.scrollBy({ left: 300, behavior: 'smooth' });
+};
+
+// 🎬 LOOP
+function animate() {
+
+  if (!isHovering && !isTouching) {
+    speed += (autoSpeed - speed) * 0.02;
+  } 
+  else if (isHovering) {
+    speed += (targetSpeed - speed) * 0.08;
+  }
+
+  row.scrollLeft += speed;
+
+  // infinite loop
+  const half = row.scrollWidth / 2;
+
+  if (row.scrollLeft >= half) {
+    row.scrollLeft -= half;
+  }
+
+  if (row.scrollLeft <= 0) {
+    row.scrollLeft += half;
+  }
+
+  requestAnimationFrame(animate);
+}
+
+animate();
 
 </script>
 

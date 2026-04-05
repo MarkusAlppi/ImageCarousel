@@ -6,24 +6,20 @@
 
 <style>
 
-/* 🔥 TÄRKEIN FIX */
+/* 🔥 BASE */
 html, body {
   margin: 0;
   padding: 0;
-  height: 100vh;
-  overflow: hidden;
   background: #141414;
   font-family: sans-serif;
+  overflow: hidden;
+  height: 100%;
 }
 
-/* 🔥 CONTAINER (lukittu korkeus) */
+/* 🔥 CONTAINER */
 .carousel {
   position: relative;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-  box-sizing: border-box;
+  padding: 10px;
 }
 
 /* 🔥 ROW */
@@ -32,26 +28,25 @@ html, body {
   gap: 10px;
   overflow-x: auto;
   overflow-y: hidden;
+  padding: 10px 0;
   align-items: center;
-  scroll-behavior: smooth;
-  width: 100%;
 }
 
 .row::-webkit-scrollbar {
   display: none;
 }
 
-/* 🔥 CARD */
+/* 🔥 CARD (TÄRKEÄ FIX) */
 .card {
   flex: 0 0 auto;
-  width: clamp(100px, 30vw, 220px); /* 🔥 pienempi = ei overflowia */
+  width: clamp(90px, 28vw, 200px); /* 🔥 pienempi ja mobiiliystävällinen */
   aspect-ratio: 1 / 1;
   border-radius: 10px;
   overflow: hidden;
   transition: transform 0.25s ease;
 }
 
-/* 🔥 IMAGE */
+/* 🔥 KUVA */
 .card img {
   width: 100%;
   height: 100%;
@@ -61,11 +56,11 @@ html, body {
 
 /* 🔥 HOVER */
 .card:hover {
-  transform: scale(1.08);
+  transform: scale(1.05);
   z-index: 10;
 }
 
-/* 🔥 BUTTONS */
+/* 🔥 NAPIT */
 .btn {
   position: absolute;
   top: 50%;
@@ -73,8 +68,8 @@ html, body {
   background: rgba(0,0,0,0.6);
   color: white;
   border: none;
-  font-size: 22px;
-  padding: 6px 10px;
+  font-size: 24px;
+  padding: 8px 12px;
   cursor: pointer;
   z-index: 20;
 }
@@ -82,16 +77,16 @@ html, body {
 .btn-left { left: 5px; }
 .btn-right { right: 5px; }
 
-/* 🔥 MOBIILI FIX */
+/* 🔥 MOBIILI FIX (TÄRKEIN) */
 @media (max-width: 600px) {
 
   .card {
-    width: 70vw; /* 🔥 tämä estää overflowin */
-    max-width: 240px;
+    width: 85vw;        /* 🔥 yksi kuva kerrallaan */
+    max-width: 260px;
   }
 
   .card:hover {
-    transform: none;
+    transform: none;     /* 🔥 ei zoomia mobiilissa */
   }
 
   .btn {
@@ -99,6 +94,9 @@ html, body {
     padding: 5px 8px;
   }
 
+  .carousel {
+    padding-bottom: 20px;
+  }
 }
 
 </style>
@@ -112,6 +110,7 @@ html, body {
 
   <div class="row">
 
+    <!-- ORIGINAL -->
     <div class="card"><img src="https://f4.bcbits.com/img/a0932635373_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a2966160115_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a3443131662_10.jpg"></div>
@@ -142,7 +141,7 @@ const row = document.querySelector('.row');
 const leftBtn = document.querySelector('.btn-left');
 const rightBtn = document.querySelector('.btn-right');
 
-/* BUTTONS */
+/* 🔘 BUTTONS */
 leftBtn.onclick = () => {
   row.scrollBy({ left: -250, behavior: 'smooth' });
 };
@@ -151,7 +150,7 @@ rightBtn.onclick = () => {
   row.scrollBy({ left: 250, behavior: 'smooth' });
 };
 
-/* TOUCH */
+/* 📱 TOUCH */
 let startX = 0;
 let isTouching = false;
 

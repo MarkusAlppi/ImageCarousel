@@ -6,23 +6,19 @@
 
 <style>
 
-/* 🔥 TÄRKEIN FIX */
+/* 🔥 PERUS */
 html, body {
   margin: 0;
   padding: 0;
-  height: 100vh;
-  overflow: hidden;
+  overflow: hidden; /* estää koko sivun scrollin */
   background: #141414;
   font-family: sans-serif;
 }
 
-/* 🔥 CONTAINER (lukittu korkeus) */
+/* 🔥 CONTAINER */
 .carousel {
   position: relative;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
+  padding: 10px 0;
   box-sizing: border-box;
 }
 
@@ -35,6 +31,7 @@ html, body {
   align-items: center;
   scroll-behavior: smooth;
   width: 100%;
+  padding: 10px;
 }
 
 .row::-webkit-scrollbar {
@@ -44,7 +41,7 @@ html, body {
 /* 🔥 CARD */
 .card {
   flex: 0 0 auto;
-  width: clamp(100px, 30vw, 220px); /* 🔥 pienempi = ei overflowia */
+  width: clamp(140px, 60vw, 260px);
   aspect-ratio: 1 / 1;
   border-radius: 10px;
   overflow: hidden;
@@ -59,7 +56,7 @@ html, body {
   display: block;
 }
 
-/* 🔥 HOVER */
+/* 🔥 HOVER (desktop) */
 .card:hover {
   transform: scale(1.08);
   z-index: 10;
@@ -85,20 +82,28 @@ html, body {
 /* 🔥 MOBIILI FIX */
 @media (max-width: 600px) {
 
+  .carousel {
+    padding: 5px 0;
+  }
+
+  .row {
+    padding: 5px;
+  }
+
   .card {
-    width: 70vw; /* 🔥 tämä estää overflowin */
-    max-width: 240px;
+    width: 75vw;        /* 🔥 tärkein: mahtuu kokonaan */
+    max-width: 260px;
+    aspect-ratio: 1 / 1;
   }
 
   .card:hover {
-    transform: none;
+    transform: none; /* ei zoomaa mobiilissa */
   }
 
   .btn {
     font-size: 18px;
     padding: 5px 8px;
   }
-
 }
 
 </style>
@@ -112,6 +117,7 @@ html, body {
 
   <div class="row">
 
+    <!-- ORIGINAL -->
     <div class="card"><img src="https://f4.bcbits.com/img/a0932635373_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a2966160115_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a3443131662_10.jpg"></div>
@@ -151,7 +157,7 @@ rightBtn.onclick = () => {
   row.scrollBy({ left: 250, behavior: 'smooth' });
 };
 
-/* TOUCH */
+/* TOUCH SWIPE */
 let startX = 0;
 let isTouching = false;
 

@@ -9,9 +9,11 @@
 html, body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
   background: #141414;
   font-family: sans-serif;
+
+  /* 🔥 TÄMÄ POIS */
+  /* overflow: hidden; */
 }
 
 /* CONTAINER */
@@ -25,10 +27,14 @@ html, body {
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  align-items: center;
+  overflow-y: visible;
+
   scroll-behavior: smooth;
-  padding: 10px 14px;
-  box-sizing: border-box;
+
+  padding: 12px 14px;
+
+  /* 🔥 TÄRKEÄ */
+  align-items: flex-start;
 }
 
 .row::-webkit-scrollbar {
@@ -52,8 +58,10 @@ html, body {
 .card img {
   width: 100%;
   height: 100%;
+
   object-fit: cover;
   object-position: center;
+
   display: block;
 }
 
@@ -80,32 +88,27 @@ html, body {
 .btn-left { left: 5px; }
 .btn-right { right: 5px; }
 
-/* 🔥 MOBIILI – TÄRKEÄ FIX */
+/* 🔥 MOBIILI FIX */
 @media (max-width: 600px) {
 
   .row {
-    padding: 10px 12px;
+    padding: 12px 12px;
+
+    /* 🔥 tärkeä: estää clipping */
+    overflow-x: auto;
+    overflow-y: visible;
   }
 
   .card {
-    width: 75vw;
-    height: auto;
+    width: 70vw;
 
-    /* 🔥 poistetaan pakotettu neliö */
-    aspect-ratio: auto;
-
-    overflow: visible;
+    /* 🔥 EI aspect-ratio: auto */
+    aspect-ratio: 1 / 1;
   }
 
   .card img {
-    height: auto;
-
-    /* 🔥 TÄRKEIN MUUTOS */
-    object-fit: contain;
-
-    background: #000;
-
-    /* kuva näkyy kokonaan */
+    /* 🔥 hieman enemmän näkyvyyttä */
+    object-position: center 40%;
   }
 
   .card:hover {
@@ -147,13 +150,8 @@ const row = document.querySelector('.row');
 const leftBtn = document.querySelector('.btn-left');
 const rightBtn = document.querySelector('.btn-right');
 
-leftBtn.onclick = () => {
-  row.scrollBy({ left: -250, behavior: 'smooth' });
-};
-
-rightBtn.onclick = () => {
-  row.scrollBy({ left: 250, behavior: 'smooth' });
-};
+leftBtn.onclick = () => row.scrollBy({ left: -250, behavior: 'smooth' });
+rightBtn.onclick = () => row.scrollBy({ left: 250, behavior: 'smooth' });
 
 let startX = 0;
 let isTouching = false;

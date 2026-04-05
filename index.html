@@ -10,7 +10,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  overflow: hidden; /* estää koko sivun scrollin */
+  overflow: hidden;
   background: #141414;
   font-family: sans-serif;
 }
@@ -18,20 +18,23 @@ html, body {
 /* 🔥 CONTAINER */
 .carousel {
   position: relative;
-  padding: 10px 0;
+  padding: 12px 0;
   box-sizing: border-box;
 }
 
 /* 🔥 ROW */
 .row {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   overflow-x: auto;
   overflow-y: hidden;
   align-items: center;
   scroll-behavior: smooth;
   width: 100%;
-  padding: 10px;
+
+  /* 🔥 TÄRKEÄ FIX: antaa tilaa ettei kuva leikkaannu */
+  padding: 10px 14px;
+  box-sizing: border-box;
 }
 
 .row::-webkit-scrollbar {
@@ -41,10 +44,16 @@ html, body {
 /* 🔥 CARD */
 .card {
   flex: 0 0 auto;
+
   width: clamp(140px, 60vw, 260px);
+
+  /* 🔥 FIX: estää ylä/alaleikkauksen */
   aspect-ratio: 1 / 1;
-  border-radius: 10px;
+
+  border-radius: 12px;
   overflow: hidden;
+  background: #000;
+
   transition: transform 0.25s ease;
 }
 
@@ -54,9 +63,12 @@ html, body {
   height: 100%;
   object-fit: cover;
   display: block;
+
+  /* 🔥 FIX: varmistaa keskitys */
+  object-position: center center;
 }
 
-/* 🔥 HOVER (desktop) */
+/* 🔥 HOVER */
 .card:hover {
   transform: scale(1.08);
   z-index: 10;
@@ -83,21 +95,32 @@ html, body {
 @media (max-width: 600px) {
 
   .carousel {
-    padding: 5px 0;
+    padding: 8px 0;
   }
 
   .row {
-    padding: 5px;
+    padding: 12px 16px; /* 🔥 lisää tilaa ylä/alareunaan */
+    gap: 10px;
   }
 
   .card {
-    width: 75vw;        /* 🔥 tärkein: mahtuu kokonaan */
+    width: 75vw;
     max-width: 260px;
     aspect-ratio: 1 / 1;
+
+    /* 🔥 estää leikkautumista reunoista */
+    overflow: hidden;
+  }
+
+  .card img {
+    object-fit: cover;
+
+    /* 🔥 tärkeä: hieman pienempi crop */
+    object-position: center 45%;
   }
 
   .card:hover {
-    transform: none; /* ei zoomaa mobiilissa */
+    transform: none;
   }
 
   .btn {

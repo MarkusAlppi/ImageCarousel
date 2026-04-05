@@ -5,49 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* 🔥 EI SCROLLBARIA */
+
 html, body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  height: auto;
-}
-
-body {
+  height: 100%;
   background: #141414;
   font-family: sans-serif;
 }
 
-/* 🔥 enemmän tilaa zoomille */
+/* 🔥 kompakti rakenne */
 .carousel {
   position: relative;
-  padding: 30px 20px 140px;
-  overflow: visible;
+  padding: 10px 10px 60px;
+  overflow: hidden;
+  height: 100%;
 }
 
+/* 🔥 rivi */
 .row {
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  overflow-y: visible;
-  padding: 20px 0;
+  overflow-y: hidden;
+  padding: 10px 0;
+  scroll-behavior: smooth;
 }
 
+/* piilota scrollbar */
 .row::-webkit-scrollbar {
   display: none;
 }
 
-/* 🔥 pienemmät ja responsiiviset kortit */
+/* 🔥 kortti */
 .card {
   flex: 0 0 auto;
-  width: clamp(120px, 28vw, 300px);
+  width: clamp(110px, 26vw, 220px);
   aspect-ratio: 1 / 1;
   border-radius: 10px;
-  overflow: visible;
-  transition: transform 0.25s ease;
+  overflow: hidden;
   position: relative;
 }
 
+/* kuva */
 .card img {
   width: 100%;
   height: 100%;
@@ -55,13 +56,16 @@ body {
   display: block;
 }
 
-/* 🔥 maltillinen zoom */
-.card:hover {
-  transform: scale(1.2);
-  z-index: 10;
+/* 🔥 zoom vain desktopissa */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    transform: scale(1.15);
+    z-index: 10;
+    transition: transform 0.2s ease;
+  }
 }
 
-/* napit */
+/* 🔥 napit */
 .btn {
   position: absolute;
   top: 50%;
@@ -69,8 +73,8 @@ body {
   background: rgba(0,0,0,0.6);
   color: white;
   border: none;
-  font-size: 22px;
-  padding: 6px 10px;
+  font-size: 18px;
+  padding: 6px 8px;
   cursor: pointer;
   z-index: 20;
 }
@@ -78,21 +82,21 @@ body {
 .btn-left { left: 5px; }
 .btn-right { right: 5px; }
 
-/* 🔥 mobiili optimointi */
+/* 🔥 mobiili */
 @media (max-width: 600px) {
 
   .carousel {
-    padding-bottom: 180px; /* 🔥 tärkein mobiilifix */
+    padding-bottom: 70px;
   }
 
-  .card:hover {
-    transform: scale(1.03); /* 🔥 erittäin pieni zoom */
+  .card {
+    width: clamp(100px, 40vw, 160px);
   }
 
   .btn {
-    font-size: 18px;
-    padding: 5px 8px;
+    font-size: 16px;
   }
+
 }
 
 </style>
@@ -106,27 +110,16 @@ body {
 
   <div class="row">
 
-    <!-- ORIGINAL -->
+    <!-- Kuvat -->
     <div class="card"><img src="https://f4.bcbits.com/img/a0932635373_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a2966160115_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a3443131662_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a0126627051_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a1545842779_10.jpg"></div>
-    <div class="card"><img src="https://www.metal-archives.com/images/9/4/2/7/942729.jpg?5204"></div>
+    <div class="card"><img src="https://www.metal-archives.com/images/9/4/2/7/942729.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a2400986321_10.jpg"></div>
     <div class="card"><img src="https://f4.bcbits.com/img/a2334861048_10.jpg"></div>
-    <div class="card"><img src="https://www.metal-archives.com/images/7/5/3/3/753301.jpg?0933"></div>
-
-    <!-- DUPLICATE -->
-    <div class="card"><img src="https://f4.bcbits.com/img/a0932635373_10.jpg"></div>
-    <div class="card"><img src="https://f4.bcbits.com/img/a2966160115_10.jpg"></div>
-    <div class="card"><img src="https://f4.bcbits.com/img/a3443131662_10.jpg"></div>
-    <div class="card"><img src="https://f4.bcbits.com/img/a0126627051_10.jpg"></div>
-    <div class="card"><img src="https://f4.bcbits.com/img/a1545842779_10.jpg"></div>
-    <div class="card"><img src="https://www.metal-archives.com/images/9/4/2/7/942729.jpg?5204"></div>
-    <div class="card"><img src="https://f4.bcbits.com/img/a2400986321_10.jpg"></div>
-    <div class="card"><img src="https://f4.bcbits.com/img/a2334861048_10.jpg"></div>
-    <div class="card"><img src="https://www.metal-archives.com/images/7/5/3/3/753301.jpg?0933"></div>
+    <div class="card"><img src="https://www.metal-archives.com/images/7/5/3/3/753301.jpg"></div>
 
   </div>
 </div>
@@ -139,12 +132,12 @@ const rightBtn = document.querySelector('.btn-right');
 
 let speed = 0;
 let targetSpeed = 0;
-let autoSpeed = 1.2;
+let autoSpeed = 0.8;
 
 let isHovering = false;
 let isTouching = false;
 
-/* 🖱️ MOUSE */
+/* 🖱️ hiiri */
 row.addEventListener('mousemove', (e) => {
   const rect = row.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -154,19 +147,16 @@ row.addEventListener('mousemove', (e) => {
 
   if (Math.abs(normalized) < 0.1) normalized = 0;
 
-  targetSpeed = normalized * 12;
+  targetSpeed = normalized * 10;
 });
 
-row.addEventListener('mouseenter', () => {
-  isHovering = true;
-});
-
+row.addEventListener('mouseenter', () => isHovering = true);
 row.addEventListener('mouseleave', () => {
   isHovering = false;
   targetSpeed = 0;
 });
 
-/* 📱 TOUCH */
+/* 📱 touch */
 let startX = 0;
 
 row.addEventListener('touchstart', (e) => {
@@ -180,7 +170,7 @@ row.addEventListener('touchmove', (e) => {
   const x = e.touches[0].clientX;
   const diff = startX - x;
 
-  row.scrollLeft += diff * 0.5;
+  row.scrollLeft += diff * 0.4;
 
   startX = x;
 });
@@ -189,16 +179,16 @@ row.addEventListener('touchend', () => {
   isTouching = false;
 });
 
-/* 🔘 BUTTONS */
+/* napit */
 leftBtn.onclick = () => {
-  row.scrollBy({ left: -200, behavior: 'smooth' });
+  row.scrollBy({ left: -180, behavior: 'smooth' });
 };
 
 rightBtn.onclick = () => {
-  row.scrollBy({ left: 200, behavior: 'smooth' });
+  row.scrollBy({ left: 180, behavior: 'smooth' });
 };
 
-/* 🎬 LOOP */
+/* animaatio */
 function animate() {
 
   if (!isHovering && !isTouching) {
@@ -211,13 +201,8 @@ function animate() {
 
   const half = row.scrollWidth / 2;
 
-  if (row.scrollLeft >= half) {
-    row.scrollLeft -= half;
-  }
-
-  if (row.scrollLeft <= 0) {
-    row.scrollLeft += half;
-  }
+  if (row.scrollLeft >= half) row.scrollLeft -= half;
+  if (row.scrollLeft <= 0) row.scrollLeft += half;
 
   requestAnimationFrame(animate);
 }
